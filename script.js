@@ -156,11 +156,13 @@ function checkAnswer(correctAnswer, userAnswer) {
     
   } else { 
     resultEl.classList.remove('hide');
-    resultEl.textContent = 'Incorrect!';
+    resultEl.textContent = 'Incorrect! The correct answer is ' + questions[currentQuestionIndex].choices[correctAnswer];
+
+
     //Hide the result after 2 second
     setTimeout(function(){
       resultEl.classList.add('hide');
-    }, 2000);
+    }, 4000);
     
   } 
   // Update the score
@@ -180,6 +182,7 @@ if (currentQuestionIndex < questions.length) {
 function endGame() {
 // Stop the timer
 clearInterval(timerIntervalId);
+
 startButton.innerText = 'Restart';
 startButton.classList.remove('hide');
 questionContainer.classList.add('hide');
