@@ -44,6 +44,14 @@ document.addEventListener("DOMContentLoaded", function () {
   startButton.addEventListener("click", startGame);
 });
 
+// Function to shuffle an array
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
 // Function to start the game
 function startGame() {
   // Hide the start button 
@@ -70,14 +78,17 @@ function startGame() {
 
 // Function to display the question
 function displayQuestion() {
-  // Get the current question from the database
-  get(questionsRef).then(function (snapshot) {
-    questions = snapshot.val();
-    var currentQuestion = questions[currentQuestionIndex];
-
+  
+  // Get the current question from the database randomly
+    get(questionsRef).then(function (snapshot) {
+      questions = snapshot.val();
+      shuffle(questions);// Shuffle the questions
+      var currentQuestion = questions[currentQuestionIndex];
+    
     // Display the question
     questionEl.textContent = currentQuestion.question;
-  
+    
+
     // Remove existing answer buttons
     while (choiceContainer.firstChild) {
       choiceContainer.removeChild(choiceContainer.firstChild);
@@ -94,8 +105,9 @@ function displayQuestion() {
       });
       choiceContainer.appendChild(button);
     });
-  });
+});
 }
+
 
 // Function to start the countdown timer
 function startCountdownTimer() {
