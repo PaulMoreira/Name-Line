@@ -1,4 +1,4 @@
-Name Line
+<b>Name Line</b>
 
 Name Line is an engaging and interactive trivia web app that tests users' knowledge of famous personalities across different domains. Built using JavaScript, HTML, and CSS, this app leverages the power of Firebase to manage the database of questions and answers.
 
