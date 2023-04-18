@@ -41,6 +41,7 @@ var currentQuestionIndex;
 var score = 0;
 var timerIntervalId;
 var questions;
+var currentQuestion;
 
 // Set up event listener for start button
 document.addEventListener("DOMContentLoaded", function () {
@@ -86,8 +87,16 @@ function displayQuestion() {
     get(questionsRef).then(function (snapshot) {
       questions = snapshot.val();
       shuffle(questions);// Shuffle the questions
-      var currentQuestion = questions[currentQuestionIndex];
-    
+      
+      if (questions.length === 0) {
+        endGame();
+        return;
+      }
+      
+      // Remove and get the current question from the shuffled array
+      currentQuestion = questions.pop();
+
+        
     // Display the question
     questionEl.textContent = currentQuestion.question;
     
@@ -159,8 +168,7 @@ function checkAnswer(correctAnswer, userAnswer) {
     
   } else { 
     resultEl.classList.remove('hide');
-    resultEl.textContent = 'Incorrect! The correct answer is ' + questions[currentQuestionIndex].choices[correctAnswer];
-
+    resultEl.textContent = 'Incorrect! The correct answer is ' + currentQuestion.choices[correctAnswer];
 
     //Hide the result after 2 second
     setTimeout(function(){
@@ -172,8 +180,7 @@ function checkAnswer(correctAnswer, userAnswer) {
     scoreEl.textContent = score;
     
 // Display the next question
-currentQuestionIndex++;
-if (currentQuestionIndex < questions.length) {
+if (questions.length > 0) {
   displayQuestion();
 } else {
   // End the game
