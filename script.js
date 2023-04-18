@@ -2,7 +2,7 @@
 // Import Firebase SDKs
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-analytics.js";
-import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-database.js";
+import { getDatabase, ref, update, get, push } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-database.js";
 
 // Configure Firebase
 const firebaseConfig = {
@@ -23,6 +23,9 @@ const database = getDatabase(app);
 
 // Reference to questions in the database
 const questionsRef = ref(database, 'questions');
+const scoresRef = ref(database, 'scores');
+
+
 
 // Set up variables
 var startButton = document.getElementById('start-game-btn');
@@ -178,10 +181,39 @@ if (currentQuestionIndex < questions.length) {
 }
 }
 
+// Function to fetch leaderboard data
+async function fetchLeaderboardData() {
+  const snapshot = await get(scoresRef);
+  return snapshot.val();
+}
+
+// Function to update leaderboard with new score
+async function updateLeaderboard(newScore) {
+  const newScoreKey = (await push(scoresRef)).key;
+  const updates = {};
+  updates[newScoreKey] = newScore;
+  await update(scoresRef, updates);
+}
+
+
 // Function to end the game
 function endGame() {
 // Stop the timer
 clearInterval(timerIntervalId);
+
+// Prompt user for their name
+const playerName = prompt("Please enter your name for the leaderboard:");
+
+if (playerName) {
+  const newScore = { name: playerName, score: score };
+  updateLeaderboard(newScore)
+    .then(() => {
+      console.log("Leaderboard updated successfully");
+    })
+    .catch((error) => {
+      console.error("Error updating leaderboard:", error);
+    });
+}
 
 startButton.innerText = 'Restart';
 startButton.classList.remove('hide');
