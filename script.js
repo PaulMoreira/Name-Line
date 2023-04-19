@@ -214,12 +214,22 @@ async function updateLeaderboard(newScore) {
 
 
 // Function to end the game
-function endGame() {
+async function endGame() {
 // Stop the timer
 clearInterval(timerIntervalId);
 
-// Prompt user for their name
-const playerName = prompt("Please enter your name for the leaderboard:");
+// Fetch leaderboard data
+const leaderboardData = await fetchLeaderboardData();
+
+// Sort leaderboard data by score in descending order
+const sortedLeaderboardData = Object.values(leaderboardData).sort((a, b) => b.score - a.score);
+
+// Check if the user's score is within the top 5
+const isTopScore = sortedLeaderboardData.length < 5 || score > sortedLeaderboardData[4].score;
+
+// Prompt user for their name if their score is within the top 5
+if (isTopScore) {
+  const playerName = prompt("You made it to the top 5! Please enter your name for the leaderboard:");
 
 if (playerName) {
   const newScore = { name: playerName, score: score };
@@ -230,6 +240,9 @@ if (playerName) {
     .catch((error) => {
       console.error("Error updating leaderboard:", error);
     });
+  }
+} else {
+  alert("Unfortunately, your score is not within the top 5.");
 }
 
 startButton.innerText = 'Restart';
