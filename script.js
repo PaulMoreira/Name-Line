@@ -28,7 +28,7 @@ const scoresRef = ref(database, 'scores');
 
 
 // Set up variables
-var startButton = document.getElementById('start-game-btn');
+var startButton;
 var questionContainer = document.getElementById('question-container');
 var gameContainer = document.getElementById('game-container');
 var questionEl = document.getElementById('question');
@@ -43,9 +43,11 @@ var timerIntervalId;
 var questions;
 var currentQuestion;
 var originalQuestions;
+const startContainer = document.getElementById('start-container');
 
 // Set up event listener for start button
 document.addEventListener("DOMContentLoaded", function () {
+  startButton = document.getElementById('start-game-btn');
   startButton.addEventListener("click", startGame);
 });
 
@@ -59,8 +61,10 @@ function shuffle(array) {
 
 // Function to start the game
 function startGame() {
-  // Hide the start button 
-    document.getElementById('start-game-btn').classList.add('hide');
+  
+   // Hide the start container
+   //const startContainer = document.getElementById('start-container');
+   startContainer.classList.add('hide');
     
   
   
@@ -246,6 +250,7 @@ if (playerName) {
 }
 
 startButton.innerText = 'Restart';
-startButton.classList.remove('hide');
+//startButton.classList.add('hide');
+startContainer.classList.remove('hide');
 questionContainer.classList.add('hide');
 }
