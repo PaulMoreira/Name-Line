@@ -42,6 +42,7 @@ var score = 0;
 var timerIntervalId;
 var questions;
 var currentQuestion;
+var originalQuestions;
 
 // Set up event listener for start button
 document.addEventListener("DOMContentLoaded", function () {
@@ -84,9 +85,18 @@ function startGame() {
 function displayQuestion() {
   
   // Get the current question from the database randomly
-    get(questionsRef).then(function (snapshot) {
+  get(questionsRef).then(function (snapshot) {
+    if (!originalQuestions) {
+      originalQuestions = snapshot.val();
+    }
+
+    if (questions && questions.length === 0) {
+      questions = [...originalQuestions];
+      shuffle(questions);
+    } else if (!questions) {
       questions = snapshot.val();
-      shuffle(questions);// Shuffle the questions
+      shuffle(questions);
+    }
       
       if (questions.length === 0) {
         endGame();
