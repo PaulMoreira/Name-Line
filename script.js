@@ -49,7 +49,7 @@ const startContainer = document.getElementById('start-container');
 document.addEventListener("DOMContentLoaded", function () {
   startButton = document.getElementById('start-game-btn');
   startButton.addEventListener("click", startGame);
-});
+  });
 
 // Function to shuffle an array
 function shuffle(array) {
@@ -223,7 +223,7 @@ async function endGame() {
 clearInterval(timerIntervalId);
 
 // Fetch leaderboard data
-const leaderboardData = await fetchLeaderboardData();
+const leaderboardData = await fetchLeaderboardData() || {};
 
 // Sort leaderboard data by score in descending order
 const sortedLeaderboardData = Object.values(leaderboardData).sort((a, b) => b.score - a.score);
@@ -250,7 +250,8 @@ if (playerName) {
 }
 
 startButton.innerText = 'Restart';
-//startButton.classList.add('hide');
 startContainer.classList.remove('hide');
 questionContainer.classList.add('hide');
 }
+
+
